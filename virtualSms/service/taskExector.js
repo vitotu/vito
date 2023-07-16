@@ -21,8 +21,11 @@ exports.LoopTask =  class {
   start() {
     this.timer = setInterval(async () => {
       for(const id of this.ids) {
-        let [res, err] = await this.cb[id]().then(r => [r, null], e => [null, e])
-        if(err) console.err(`[LoopTask ${id}] error: `, err)
+        const cb = this.cb[id] // 防止在执行过程中被删除导致报错
+        if(cb) {
+          let [res, err] = await this.cb[id]().then(r => [r, null], e => [null, e])
+          if(err) console.err(`[LoopTask ${id}] error: `, err)
+        }
       }
     }, this.intervalTime)
     return this.timer
@@ -33,10 +36,10 @@ exports.LoopTask =  class {
   }
   removeById(id) {
     delete this.cb[id]
-    this.ids = this.ids.filter(i => i !== id)
+    this.ids = this.ids.filter(i => i != id)
   }
   get Status() {
-    return this.timer
+    return Boolean(this.timer)
   }
   hasId(id){
     return this.cb[id]

@@ -39,12 +39,10 @@ exports.smsStop = async function(ctx, next) {
 
 exports.ListenNumber = async function(ctx, next) {
   const queryData = parseQueryByUrl(ctx.url)
-  let task = await ListenByNumber(queryData.numbers)
+  const numbers = queryData.numbers.split(',')
+  let task = await ListenByNumber(numbers)
   if(task) {
-    ctx.body = JSON.stringify({
-      code: 0,
-      message: '任务已启动',
-    })
+    ctx.body = JSON.stringify(task)
   } else {
     ctx.body = JSON.stringify({
       code: 500,

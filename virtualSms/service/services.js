@@ -183,7 +183,6 @@ exports.ListenByNumber = async function(numbers) {
     code: 200,
     message: '任务已经启动',
     id,
-    taskStatus,
   }
 }
 // ref: https://juejin.cn/post/7062628245291663373

@@ -149,40 +149,43 @@ exports.SmsStop = async function(options = {}) {
   else if(options.stopLoop) return tasks.stop()
   return false
 }
-// TODO: 服务需返回等量的id
-exports.ListenByNumber = async function(numbers) {
-  let count = 0, id, taskStatus
-  if(numbers[0]){
-    id = tasks.add(async () => {
-      let [res, err] = await getDataByUrl(`${config.numberUrlPrefix}${numbers[0]}`).then(r => [r, null], e => [null, e])
 
-      count++
-      if(err) {
+exports.ListenByNumber = async function(numbers) {
+  let count = 0, taskStatus, ids = []
+  numbers.forEach(number => {
+    if(number) {
+      let taskId = tasks.add(async () => {
+        let [res, err] = await getDataByUrl(`${config.numberUrlPrefix}${numbers[0]}`).then(r => [r, null], e => [null, e])
+  
+        count++
+        if(err) {
+          ws.sendToClient({
+            id: ws.id,
+            code: 500,
+            message: '请求失败',
+            err,
+            count,
+          })
+          return
+        }
+        let result = parseNumber(res.body)
         ws.sendToClient({
           id: ws.id,
-          code: 500,
-          message: '请求失败',
-          err,
+          code: 0,
+          message: '请求成功',
+          data: result,
           count,
         })
-        return
-      }
-      let result = parseNumber(res.body)
-      ws.sendToClient({
-        id: ws.id,
-        code: 0,
-        message: '请求成功',
-        data: result,
-        count,
       })
-    })
-  }
+      ids.push({number, taskId})
+    }
+  })
   if(!tasks.Status) taskStatus =  tasks.start()
   else taskStatus =  tasks.Status
   return {
     code: 200,
     message: '任务已经启动',
-    id,
+    ids,
   }
 }
 // ref: https://juejin.cn/post/7062628245291663373

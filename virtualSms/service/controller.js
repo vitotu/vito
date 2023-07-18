@@ -27,8 +27,8 @@ exports.smsStop = async function(ctx, next) {
   const queryData = parseQueryByUrl(ctx.url)
   if(queryData.stopLoop) {
     await SmsStop({ stopLoop: true })
-  } else if(queryData.taskId) {
-    await SmsStop({ id: queryData.taskId })
+  } else if(queryData.taskIds) {
+    await SmsStop({ taskIds: queryData.taskIds })
   }
   ctx.body = JSON.stringify({
     code: 0,

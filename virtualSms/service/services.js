@@ -145,7 +145,13 @@ exports.SmsService = async function(key = 'sms24') {
 }
 
 exports.SmsStop = async function(options = {}) {
-  if(options.id) return tasks.removeById(options.id)
+  if(options.taskIds) {
+    let taskIds = options.taskIds.split(','), res = []
+    taskIds.forEach(id => {
+      res.push(tasks.removeById(id))
+    })
+    return res
+  }
   else if(options.stopLoop) return tasks.stop()
   return false
 }

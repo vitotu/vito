@@ -22,7 +22,9 @@ get http://localhost:3000 http/1.1
 
 ### 2. 停止任务
 
-get http://localhost:3000/stop?taskId=wyhIe1_0CFE0Hqknsr2_T http/1.1
+get http://localhost:3000/stop?taskIds=wyhIe1_0CFE0Hqknsr2_T http/1.1
+
+taskIds: 为任务id，多个任务id用逗号分隔
 
 返回值示例：
 

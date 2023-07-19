@@ -1,16 +1,16 @@
 @hostname = localhost
 @port = 3000
 @host = {{hostname}}:{{port}}
-# 开启主页监听
+### 开启主页监听
 GET http://{{hostname}} http/1.1
 
-# 停止任务
+### 停止任务
 get http://{{hostname}}/stop?taskIds=wyhIe1_0CFE0Hqknsr2_T http/1.1
 
-# 停止所有任务
+### 停止所有任务
 get http://{{hostname}}/stop?stopLoop=true http/1.1
 
-# 批量开启号码监听任务
-get http://{{hostname}}/listenNumber?numbers=8522352158489 http/1.1
+### 批量开启号码监听任务
+get http://{{hostname}}/listenNumber?numbers=12417013392 http/1.1
 
-# 
+###

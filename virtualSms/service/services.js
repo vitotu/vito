@@ -33,13 +33,6 @@ class ws {
         console.log(error)
         return ws.close()
       }
-      // ws.on('message', (msg, ...rest) => {
-      //   console.log(msg.toString('utf8'), rest)
-      //   this.cb.forEach((fn, key, map) => {
-      //     fn(msg, { key, map } ,rest)
-      //   })
-      //   // ws.send('alived')
-      // })
     })
   }
   static sendToClient(data) {

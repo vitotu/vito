@@ -18,7 +18,7 @@ class ws {
       if(!request.url.includes(`${path}/ws`)) {
         return ws.close()
       }
-      this.online = this.ws._server._connections
+      this.online = this.ws.clients.size
       console.log(`socket当前在线${this.online}个连接`)
       const {
         id = ''
@@ -35,26 +35,25 @@ class ws {
       }
     })
   }
-  static sendToClient(data) {
+  static sendToClient(data) { // TODO: 继续完成连接保持
     let iskeep = false // 加个变量做下发成功判断
     if (!(this.ws instanceof WebSocket.Server)) {
       return iskeep;
     }
-    const { id } = data
-    if(id) {
-      let client = this.ws.clients.find(c => c.readyState === WebSocket.OPEN && c.id === id)
-      if(client) {
+    const { ids = [] } = data
+    let clients
+    if(ids.length > 0) {
+      clients = Array.from(this.ws.clients).filter(c => c.readyState === WebSocket.OPEN && ids.includes(c.id))
+    } else {
+      clients = Array.from(this.ws.clients)
+    }
+
+    clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(data));
         iskeep = true
       }
-    } else {
-      this.ws.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(data));
-          iskeep = true
-        }
-      });
-    }
+    });
     return iskeep;
   }
   static onMessage(fn) {
@@ -69,12 +68,13 @@ class ws {
 exports.ws = ws
 
 
-exports.SmsService = async function(key = 'sms24') {
+exports.SmsService = async function(wsIds, key = 'sms24') {
   let count = 0, id, oldRes
   if(!SmsModules.has(key)) return {
     code: 404,
     message: 'key对应的模块不存在'
   }
+  // 仅支持启动内置模块的爬虫任务， 且避免重复启动相同的任务
   if(SmsModules.has(key) && !SmsModules.get(key)) {
     id = tasks.add(async () => {
       let [res, err] = await getDataByUrl(config.mainPath).then(r => [r, null], e => [null, e])
@@ -84,7 +84,7 @@ exports.SmsService = async function(key = 'sms24') {
       console.log(count)
       if(err) {
         ws.sendToClient({
-          id: ws.id,
+          ids: wsIds,
           code: 500,
           message: '请求失败',
           err,
@@ -99,7 +99,7 @@ exports.SmsService = async function(key = 'sms24') {
       // let result= 'debug'
       if(!oldRes) {
         ws.sendToClient({
-          id: ws.id,
+          ids: wsIds,
           code: 0,
           message: '初始化成功',
           data: result,
@@ -110,7 +110,7 @@ exports.SmsService = async function(key = 'sms24') {
       }
       let diffNumbers = diff2Array(result, oldRes)
       ws.sendToClient({
-        id: ws.id,
+        ids: wsIds,
         code: 0,
         message: '请求成功',
         data: diffNumbers,
@@ -118,7 +118,7 @@ exports.SmsService = async function(key = 'sms24') {
       })
       oldRes = result
     })
-    SmsModules.set(key, id)
+    SmsModules.set(key, id) // 将该模块标记为已启动
   }
   if(!tasks.Status) {
     let taskStatus = tasks.start()
@@ -149,17 +149,16 @@ exports.SmsStop = async function(options = {}) {
   return false
 }
 
-exports.ListenByNumber = async function(numbers) {
+exports.ListenByNumber = async function(numbers, wsIds) {
   let count = 0, taskStatus, ids = []
   numbers.forEach(number => {
     if(number) {
       let taskId = tasks.add(async () => {
-        let [res, err] = await getDataByUrl(`${config.numberUrlPrefix}${numbers[0]}`).then(r => [r, null], e => [null, e])
-  
+        let [res, err] = await getDataByUrl(`${config.numberUrlPrefix}${number}`).then(r => [r, null], e => [null, e])
         count++
         if(err) {
           ws.sendToClient({
-            id: ws.id,
+            ids: wsIds,
             code: 500,
             message: '请求失败',
             err,
@@ -169,7 +168,7 @@ exports.ListenByNumber = async function(numbers) {
         }
         let result = parseNumber(res.body)
         ws.sendToClient({
-          id: ws.id,
+          ids: wsIds,
           code: 0,
           message: '请求成功',
           data: result,

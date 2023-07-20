@@ -24,7 +24,7 @@ exports.LoopTask =  class {
         const cb = this.cb[id] // 防止在执行过程中被删除导致报错
         if(cb) {
           let [res, err] = await this.cb[id]().then(r => [r, null], e => [null, e])
-          if(err) console.err(`[LoopTask ${id}] error: `, err)
+          if(err) console.error(`[LoopTask ${id}] error: `, err)
         }
       }
     }, this.intervalTime)

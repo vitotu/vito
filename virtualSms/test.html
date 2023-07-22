@@ -9,8 +9,8 @@
   <body>
     <script>
       
-
-      fetch('http://localhost:3000').then(res => {
+      const wsId = 1008
+      fetch(`http://localhost:3000?wsIds=${wsId}`).then(res => {
         if(res.ok){
           return res.json()
         } else {
@@ -18,7 +18,7 @@
         }
       }).then(res => {
         console.log(res)
-        var ws = new WebSocket('ws://localhost:3000/ws?id=1008')
+        var ws = new WebSocket(`ws://localhost:3000/ws?id=${wsId}`)
         ws.onopen = function () {
           console.log('connected')
           let count = 0

@@ -2,6 +2,7 @@ const https = require('https');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const { HttpsProxyAgent } = require('https-proxy-agent');
+
 const config = require('./config.json');
 
 const options = {

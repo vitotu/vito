@@ -1,0 +1,37 @@
+{
+  "name": "sms-pages",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "@vant/nuxt": "^1.0.2",
+    "nuxt": "^3.4.3",
+    "unplugin-auto-import": "^0.15.3",
+    "unplugin-vue-components": "^0.24.1"
+  },
+  "dependencies": {
+    "@varlet/ui": "^2.10.2",
+    "axios": "^1.4.0",
+    "koa": "^2.14.2"
+  },
+  "description": "Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitotu/vito.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitotu/vito/issues"
+  },
+  "homepage": "https://github.com/vitotu/vito#readme"
+}

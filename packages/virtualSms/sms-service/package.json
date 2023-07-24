@@ -1,0 +1,34 @@
+{
+  "name": "sms-service",
+  "version": "1.0.0",
+  "description": "smsService 的后端服务， 提供预置模块的短信主页，及号码监听服务 客户端需同时使用ws监听路径：ws://localhost:3000/ws?id=1008 监听服务获得的数据将通过ws发送给客户端",
+  "main": "index.js",
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "@koa/router": "^12.0.0",
+    "cheerio": "^1.0.0-rc.12",
+    "colors": "^1.4.0",
+    "https-proxy-agent": "^7.0.1",
+    "koa": "^2.14.2",
+    "nanoid": "^3.0.0",
+    "qs": "^6.11.2",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitotu/vito.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitotu/vito/issues"
+  },
+  "homepage": "https://github.com/vitotu/vito#readme"
+}

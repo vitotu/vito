@@ -17,5 +17,8 @@ export default defineNuxtConfig({
         resolvers: [VarletUIResolver({ autoImport: true })],
       })
     ]
+  },
+  devServer: {
+    port: 8080,
   }
 })

@@ -25,6 +25,8 @@ class ws {
       } = Qs.parse(request.url.split('?')[1])
       console.log(id)
       if(!id) return ws.close()
+      let ids = Array.from(this.ws.clients).map(c => c.id)
+      if(ids.includes(id)) return ws.close()
       try {
         ws.id = id
         const obj = { 'message': '连接成功', 'code': 200, 'data': { 'id': id } }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <MainNumbers />
-    <VanTabbar v-model="active">
+    <VanTabbar placeholder v-model="active">
       <VanTabbarItem icon="home-o">首页</VanTabbarItem>
       <VanTabbarItem icon="search">搜索</VanTabbarItem>
       <VanTabbarItem icon="friends-o">朋友</VanTabbarItem>

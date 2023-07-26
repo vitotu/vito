@@ -4,13 +4,12 @@
   "description": "vito entry all in one",
   "main": "index.js",
   "workspaces": [
-    "./packages/*",
     "packages/virtualSms/sms-service",
     "packages/virtualSms/sms-pages"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sms": "npm run dev --workspaces=sms-pages & npm run dev --workspaces=sms-service"
+    "sms": "npm run dev -w=sms-pages | npm run dev -w=sms-service"
   },
   "author": "",
   "license": "ISC",

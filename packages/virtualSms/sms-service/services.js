@@ -71,6 +71,7 @@ exports.ws = ws
 
 
 exports.SmsService = async function(wsIds, key = 'sms24') {
+  // TODO: 任务已存在时， 则不再启动， 并返回任务中缓存的oldRes
   let count = 0, id, oldRes
   if(!SmsModules.has(key)) return {
     code: 404,
@@ -127,14 +128,16 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
     return {
       code: 201,
       message: '任务启动成功',
-      id,
+      id: SmsModules.get(key),
+      cacheNumbers: oldRes,
       // taskStatus,
     }
   }
   else return {
     code: 200,
     message: '任务已经启动',
-    id,
+    id: SmsModules.get(key),
+    cacheNumbers: oldRes,
     // taskStatus: tasks.Status,
   }
 }

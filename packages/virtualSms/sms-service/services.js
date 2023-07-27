@@ -69,10 +69,11 @@ class ws {
 }
 exports.ws = ws
 
+let oldRes
 
 exports.SmsService = async function(wsIds, key = 'sms24') {
   // TODO: 任务已存在时， 则不再启动， 并返回任务中缓存的oldRes
-  let count = 0, id, oldRes
+  let count = 0, id
   if(!SmsModules.has(key)) return {
     code: 404,
     message: 'key对应的模块不存在'
@@ -94,7 +95,8 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
           count,
           old: {
             oldNumbers: oldRes
-          }
+          },
+          taskId: id,
         })
         return
       }
@@ -107,6 +109,7 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
           message: '初始化成功',
           data: result,
           count,
+          taskId: id,
         })
         oldRes = result
         return 200
@@ -118,6 +121,7 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
         message: '请求成功',
         data: diffNumbers,
         count,
+        taskId: id,
       })
       oldRes = result
     })
@@ -168,6 +172,7 @@ exports.ListenByNumber = async function(numbers, wsIds) {
             message: '请求失败',
             err,
             count,
+            taskId,
           })
           return
         }
@@ -178,6 +183,7 @@ exports.ListenByNumber = async function(numbers, wsIds) {
           message: '请求成功',
           data: result,
           count,
+          taskId,
         })
       })
       ids.push({number, taskId})

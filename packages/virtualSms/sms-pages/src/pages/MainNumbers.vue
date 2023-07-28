@@ -1,17 +1,22 @@
 <script lang="ts" setup>
 import { ref, onMounted, reactive } from 'vue'
+import type { Ref } from 'vue'
 import Clipboard from "clipboard"
 import { showToast } from 'vant'
 import { listenMainPages, listenByNumbers, stopTaskByIds } from '../apis'
-import { NumberItem } from '../types'
+import { NumberItem, NumberDetail } from '../types'
+import NumberDetial from '../components/NumberDetial.vue'
 const count = ref(0)
 const wsId = '1008'
 let numbers:Array<NumberItem> = reactive([])
 let taskId = ref('')
 
-let currentNumber = ref('')
-let smsList:Array<string> = reactive([])
-let smsTaskId = ref('')
+let numberDetail: NumberDetail = reactive({
+  curNumber: '',
+  smsList: [],
+  taskId: '',
+  refreshTimes: 0,
+})
 
 let showDetail = ref(false)
 
@@ -30,7 +35,7 @@ onMounted(async () => {
     if(data.code == 0 && data.taskId){
       console.log('success', data, data.count)
       if(data.taskId === taskId.value) updateNumbers(data.data, data.count)
-      else if(data.taskId === smsTaskId.value) updateSmsList(data?.data?.lastSMSs || [])
+      else if(data.taskId === numberDetail.taskId) updateSmsList(data)
     } else {
       console.error('error: ', data?.old?.oldNumbers.length, data.count)
     }
@@ -42,14 +47,14 @@ function updateNumbers(data: Array<NumberItem>, newCount:number) {
   count.value = newCount
 }
 
-function updateSmsList(data: Array<string>) {
-  console.log('@@@', data)
-  if(data?.length) smsList.push(...data)
+function updateSmsList(data: {count: number, data: {lastSMSs: string[]}}) {
+  numberDetail.refreshTimes = data.count
+  numberDetail.smsList = data?.data?.lastSMSs || []
 }
 
 
 function HandleNumberClick(item: NumberItem) {
-  currentNumber.value = item.number
+  numberDetail.curNumber = item.number
   let clipboard = new Clipboard('.main-numbers-page', {
     text: () => {
       return item.number
@@ -66,7 +71,7 @@ function HandleNumberClick(item: NumberItem) {
   // TODO: 打开弹窗
   listenByNumbers([item.number], [wsId]).then(r => {
     if(r.code == 200) {
-      smsTaskId.value = r.ids?.[0]?.taskId || ''
+      numberDetail.taskId = r.ids?.[0]?.taskId || ''
     }
   })
   showDetail.value = true
@@ -76,6 +81,9 @@ function HandleCloseNumber(taskId: string) {
   stopTaskByIds([taskId]).then(r => {
     console.log(r)
   })
+  numberDetail.taskId = ''
+  numberDetail.smsList = []
+  numberDetail.curNumber = ''
 }
 
 </script>
@@ -115,16 +123,13 @@ function HandleCloseNumber(taskId: string) {
       v-model:show="showDetail"
       position="top"
       round
-      @close="HandleCloseNumber(smsTaskId)"
+      @close="HandleCloseNumber(numberDetail.taskId)"
     >
-      <div class="number-detail">
-        <div>{{ currentNumber }}</div>
-        <div>
-          <li v-for="text in smsList" :key="text">
-            {{ text }}
-          </li>
-        </div>
-      </div>
+      <NumberDetial
+        :cur-number="numberDetail.curNumber"
+        :refresh-times="numberDetail.refreshTimes"
+        :sms-list="numberDetail.smsList"
+      />
     </VanPopup>
   </div>
 </template>

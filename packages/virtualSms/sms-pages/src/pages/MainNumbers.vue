@@ -1,15 +1,18 @@
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, nextTick } from 'vue'
 import type { Ref } from 'vue'
 import Clipboard from "clipboard"
 import { showToast } from 'vant'
+
+import { HOST_CONFIG } from '../config'
 import { listenMainPages, listenByNumbers, stopTaskByIds } from '../apis'
-import { NumberItem, NumberDetail } from '../types'
+import { NumberItem, NumberDetail, NotificationMsg } from '../types'
 import NumberDetial from '../components/NumberDetial.vue'
 const count = ref(0)
 const wsId = '1008'
 let numbers:Array<NumberItem> = reactive([])
 let taskId = ref('')
+const numbersContent = ref<HTMLDivElement | null>(null)
 
 let numberDetail: NumberDetail = reactive({
   curNumber: '',
@@ -25,8 +28,11 @@ onMounted(async () => {
   if(err) return console.error(err)
   console.log('listenMainPages', res)
   taskId.value = res?.id
-  if(res.cacheNumbers?.length) numbers.push(...res.cacheNumbers)
-  var ws = new WebSocket(`ws://localhost:3080/ws?id=${wsId}`)
+  if(res.cacheNumbers?.length) numbers.push(...res.cacheNumbers.map((i:NumberItem) => {
+    i.isClick = true
+    return i
+  }))
+  var ws = new WebSocket(`${HOST_CONFIG.getWsPrefix()}/ws?id=${wsId}`)
   ws.onopen = function () {
     console.log('connected')
   }
@@ -42,18 +48,53 @@ onMounted(async () => {
 })
 
 function updateNumbers(data: Array<NumberItem>, newCount:number) {
-  if(data?.length) numbers.push(...data)
+  if(data?.length) {
+    if(count.value == 0) numbers.push(...data.map((i:NumberItem) => {
+      i.isClick = true
+      return i
+    }))
+    else numbers.push(...data)
+    let numberItem: NumberItem = data[0]
+    NotificationNew({
+      title: "发现新号码",
+      body: numberItem.country+numberItem.number,
+      icon: ''
+    })
+    nextTick(() => {
+      // 更新号码后滚动到底部， 即最新的号码处
+      const contentDom = numbersContent.value
+      if(contentDom) contentDom.scrollTop = contentDom?.scrollHeight
+      })
+  }
   count.value = newCount
 }
+
+
 
 function updateSmsList(data: {count: number, data: {lastSMSs: string[]}}) {
   numberDetail.refreshTimes = data.count
   numberDetail.smsList = data?.data?.lastSMSs || []
 }
 
+function NotificationNew(msg: NotificationMsg) {
+  if(typeof window != 'undefined' && window.Notification.permission == "granted") {
+    new Notification(msg.title, {
+      body: msg.body,
+      icon: msg.icon,
+    })
+  } else if (typeof window != 'undefined' && window.Notification.permission != "denied") {
+    window.Notification.requestPermission(function(permission) {
+      new Notification(msg.title, {
+        body: msg.body,
+        icon: msg.icon,
+      })
+    })
+  }
+}
 
 function HandleNumberClick(item: NumberItem) {
   numberDetail.curNumber = item.number
+  item.isClick = true
   let clipboard = new Clipboard('.main-numbers-page', {
     text: () => {
       return item.number
@@ -89,7 +130,7 @@ function HandleCloseNumber(taskId: string) {
 
 <template>
   <div class="main-numbers-page">
-    <VanNavBar placeholder>
+    <VanNavBar placeholder fixed>
       <template #title>
         {{ `第${count}次刷新` }}
       </template>
@@ -97,26 +138,33 @@ function HandleCloseNumber(taskId: string) {
         total: {{ numbers.length }}
       </template>
     </VanNavBar>
-    <VanGrid
+    <div
       v-if="numbers.length"
-      :column-num="2"
+      class="numbers-content"
+      ref="numbersContent"
     >
-      <VanGridItem
-        class="number-item"
-        v-for="(item, index) in numbers"
-        :key="index+item.number"
-        @click="HandleNumberClick(item)"
+      <VanGrid
+        :column-num="2"
       >
-        <div class="country">
-          <van-icon name="location" />
-          {{ item.country }}
-        </div>
-        <div class="number">
-          <van-icon name="phone" />
-          {{ item.number }}
-        </div>
-      </VanGridItem>
-    </VanGrid>
+        <VanGridItem
+          class="number-item"
+          v-for="(item, index) in numbers"
+          :key="index+item.number"
+          @click="HandleNumberClick(item)"
+        >
+          <VanBadge :content="item.isClick ? '' : 'new'">
+            <div class="country">
+              <van-icon name="location" />
+              {{ item.country }}
+            </div>
+            <div class="number">
+              <van-icon name="phone" />
+              {{ item.number }}
+            </div>
+          </VanBadge>
+        </VanGridItem>
+      </VanGrid>
+    </div>
     <VanLoading v-else class="number-loading" vertical>号码加载中。。。</VanLoading>
     <VanPopup
       v-model:show="showDetail"
@@ -134,6 +182,10 @@ function HandleCloseNumber(taskId: string) {
 </template>
 
 <style scoped>
+.main-numbers-page {
+  display: flex;
+  flex-direction: column;
+}
 .number-item > :deep(div) {
   padding: 4px;
   border: 1px solid rgb(168, 210, 168);
@@ -147,5 +199,9 @@ function HandleCloseNumber(taskId: string) {
 }
 .number-detail {
   min-height: 30vh;
+}
+.numbers-content {
+  flex: 1;
+  overflow-y: auto;
 }
 </style>

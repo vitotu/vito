@@ -23,7 +23,6 @@ class ws {
       const {
         id = ''
       } = Qs.parse(request.url.split('?')[1])
-      console.log(id)
       if(!id) return ws.close()
       let ids = Array.from(this.ws.clients).map(c => c.id)
       if(ids.includes(id)) return ws.close()
@@ -85,7 +84,6 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
       // let res = { body : ''}
       // let err
       count++
-      console.log(count)
       if(err) {
         ws.sendToClient({
           ids: wsIds,

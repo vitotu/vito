@@ -14,3 +14,4 @@ get http://{{hostname}}/stop?stopLoop=true http/1.1
 get http://{{hostname}}/listenNumber?numbers=12417013392 http/1.1
 
 ###
+get https://sms24.me/en/numbers/12809446226/2 http/1.1

@@ -33,7 +33,6 @@ onMounted(async () => {
   ws.onmessage = function (e) {
     let data = JSON.parse(e.data)
     if(data.code == 0 && data.taskId){
-      console.log('success', data, data.count)
       if(data.taskId === taskId.value) updateNumbers(data.data, data.count)
       else if(data.taskId === numberDetail.taskId) updateSmsList(data)
     } else {

@@ -18,15 +18,15 @@ const props = withDefaults(defineProps<DetailProps>(), {
 
 <template>
   <div class="number-detail">
-    <div>{{ `${curNumber}(${refreshTimes})` }}</div>
+    <div class="detail-title">{{ `${curNumber}(${refreshTimes})` }}</div>
     <div
       v-if="smsList.length"
       class="sms-list"
     >
       <div>
-        <li v-for="text in smsList" :key="text">
+        <div class="sms-item" v-for="text in smsList" :key="text">
           {{ text }}
-        </li>
+        </div>
       </div>
     </div>
     <VanLoading v-else class="sms-loading" vertical>短信加载中。。。</VanLoading>
@@ -35,9 +35,19 @@ const props = withDefaults(defineProps<DetailProps>(), {
 
 <style scoped>
 .sms-list {
-  font-size: 12px;
+  font-size: 14px;
 }
 .number-detail {
   text-align: center;
+}
+.sms-item {
+  text-align: left;
+  margin: 8px 6px;
+  max-width: 100vw;
+  word-wrap: break-word;
+  background-color: rgba(57, 169, 237, 0.2);
+}
+.detail-title {
+  margin: 8px;
 }
 </style>

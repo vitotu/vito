@@ -1,6 +1,5 @@
 <template>
   <div class="app">
-    <!-- <MainNumbers class="content" /> -->
     <ClientOnly>
       <keep-alive>
         <component
@@ -20,11 +19,6 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-// import MainNumbers from './src/pages/MainNumbers.vue'
-// import Config from './src/pages/Config.vue'
-// const MainNumbers = resolveComponent('MainNumbers')
-// const Config = resolveComponent('Config')
-// import { MainNumbers, Config } from '#components'
 const active = ref('MainNumbers')
 </script>
 

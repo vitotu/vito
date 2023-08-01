@@ -1,3 +1,4 @@
+// 改为动态组件
 export default function getRouterConfig() {
   return [
     {

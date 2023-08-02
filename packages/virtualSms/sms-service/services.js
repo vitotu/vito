@@ -34,9 +34,20 @@ class ws {
         console.log(error)
         return ws.close()
       }
+      ws.on('message', (message) => {
+        let res = JSON.parse(message)
+        if(res.id == ws.id) ws.isAlive = true
+      })
     })
+    setInterval(() => {
+      let clients = Array.from(this.ws.clients)
+      clients.forEach((client) => {
+        if(!client.isAlive) client.close()
+        else client.isAlive = false
+      })
+    }, 60000)
   }
-  static sendToClient(data) { // TODO: 继续完成连接保持
+  static sendToClient(data) {
     let iskeep = false // 加个变量做下发成功判断
     if (!(this.ws instanceof WebSocket.Server)) {
       return iskeep;
@@ -84,8 +95,9 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
       // let res = { body : ''}
       // let err
       count++
+      let wsStatus = false
       if(err) {
-        ws.sendToClient({
+         wsStatus =  ws.sendToClient({
           ids: wsIds,
           code: 500,
           message: '请求失败',
@@ -96,12 +108,13 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
           },
           taskId: id,
         })
+        if(!wsStatus) tasks.removeById(id)
         return
       }
       let result = parseMainPage(res.body)
       // let result= 'debug'
       if(!oldRes) {
-        ws.sendToClient({
+        wsStatus =  ws.sendToClient({
           ids: wsIds,
           code: 0,
           message: '初始化成功',
@@ -110,10 +123,11 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
           taskId: id,
         })
         oldRes = result
+        if(!wsStatus) tasks.removeById(id)
         return 200
       }
       let diffNumbers = diff2Array(result, oldRes)
-      ws.sendToClient({
+      wsStatus =  ws.sendToClient({
         ids: wsIds,
         code: 0,
         message: '请求成功',
@@ -122,6 +136,7 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
         taskId: id,
       })
       oldRes = result
+      if(!wsStatus) tasks.removeById(id)
     })
     SmsModules.set(key, id) // 将该模块标记为已启动
   }

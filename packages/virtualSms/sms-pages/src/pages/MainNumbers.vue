@@ -9,7 +9,7 @@ import { listenMainPages, listenByNumbers, stopTaskByIds } from '../apis'
 import { NumberItem, NumberDetail, NotificationMsg } from '../types'
 import NumberDetial from '../components/NumberDetial.vue'
 const count = ref(0)
-const wsId = '1008'
+const wsId = Math.random().toString()
 let numbers:Array<NumberItem> = reactive([])
 let taskId = ref('')
 const numbersContent = ref<HTMLDivElement | null>(null)
@@ -45,6 +45,13 @@ onMounted(async () => {
       console.error('error: ', data?.old?.oldNumbers.length, data.count)
     }
   }
+  // 发送心跳， 防止连接断开， 若60s内没有发送消息， 会自动断开连接
+  setInterval(() => {
+    ws.send(JSON.stringify({
+      id: wsId,
+      msg: 'ping',
+    }))
+  }, 10000)
 })
 
 function updateNumbers(data: Array<NumberItem>, newCount:number) {

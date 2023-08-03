@@ -18,8 +18,18 @@
 
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted, provide } from 'vue'
+import type { Ref } from 'vue'
+import { Ws } from './src/utils'
 const active = ref('MainNumbers')
+const ws:Ref<Ws|null> = ref(null)
+
+onMounted(() => {
+  ws.value = new Ws()
+})
+
+provide('ws', ws)
+
 </script>
 
 <style scoped>

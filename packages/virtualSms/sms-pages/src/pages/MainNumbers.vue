@@ -1,15 +1,16 @@
 <script lang="ts" setup>
-import { ref, onMounted, reactive, nextTick } from 'vue'
+import { ref, onMounted, reactive, nextTick, inject } from 'vue'
 import type { Ref } from 'vue'
 import Clipboard from "clipboard"
 import { showToast } from 'vant'
-
+import { Ws } from '../utils'
 import { HOST_CONFIG } from '../config'
 import { listenMainPages, listenByNumbers, stopTaskByIds } from '../apis'
 import { NumberItem, NumberDetail, NotificationMsg } from '../types'
 import NumberDetial from '../components/NumberDetial.vue'
 const count = ref(0)
-const wsId = Math.random().toString()
+const ws:Ref<Ws> = inject('ws')
+const wsId = ws.value.wsId
 let numbers:Array<NumberItem> = reactive([])
 let taskId = ref('')
 const numbersContent = ref<HTMLDivElement | null>(null)
@@ -32,26 +33,12 @@ onMounted(async () => {
     i.isClick = true
     return i
   }))
-  var ws = new WebSocket(`${HOST_CONFIG.getWsPrefix()}/ws?id=${wsId}`)
-  ws.onopen = function () {
-    console.log('connected')
+
+  function updateCb (data) {
+    if(data.taskId === taskId.value) updateNumbers(data.data, data.count)
+    else if(data.taskId === numberDetail.taskId) updateSmsList(data)
   }
-  ws.onmessage = function (e) {
-    let data = JSON.parse(e.data)
-    if(data.code == 0 && data.taskId){
-      if(data.taskId === taskId.value) updateNumbers(data.data, data.count)
-      else if(data.taskId === numberDetail.taskId) updateSmsList(data)
-    } else {
-      console.error('error: ', data?.old?.oldNumbers.length, data.count)
-    }
-  }
-  // 发送心跳， 防止连接断开， 若60s内没有发送消息， 会自动断开连接
-  setInterval(() => {
-    ws.send(JSON.stringify({
-      id: wsId,
-      msg: 'ping',
-    }))
-  }, 10000)
+  let id = ws.value.addCb(updateCb)
 })
 
 function updateNumbers(data: Array<NumberItem>, newCount:number) {
@@ -71,7 +58,7 @@ function updateNumbers(data: Array<NumberItem>, newCount:number) {
       // 更新号码后滚动到底部， 即最新的号码处
       const contentDom = numbersContent.value
       if(contentDom) contentDom.scrollTop = contentDom?.scrollHeight
-      })
+    })
   }
   count.value = newCount
 }
@@ -115,7 +102,6 @@ function HandleNumberClick(item: NumberItem) {
     clipboard.destroy()
     showToast('复制失败')
   })
-  // TODO: 打开弹窗
   listenByNumbers([item.number], [wsId]).then(r => {
     if(r.code == 200) {
       numberDetail.taskId = r.ids?.[0]?.taskId || ''

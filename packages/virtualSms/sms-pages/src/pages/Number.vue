@@ -4,8 +4,10 @@ import type { Ref } from 'vue'
 import { Ws } from '../utils'
 import { NumberDetail } from '../types'
 import { listenByNumbers } from '../apis'
-const curNumber = ref('')
+import NumberDetial from '../components/NumberDetial.vue'
+
 const ws:Ref<Ws> = inject('ws')
+let wsCbId = ref('')
 let numberDetail: NumberDetail = reactive({
   curNumber: '',
   smsList: [],
@@ -14,21 +16,35 @@ let numberDetail: NumberDetail = reactive({
 })
 
 function handleSearch() {
-  console.log(curNumber.value)
-  if(curNumber.value) {
-    listenByNumbers([curNumber.value], [ws.value.wsId]).then(r => {
+  if(numberDetail.curNumber) {
+    listenByNumbers([numberDetail.curNumber], [ws.value.wsId]).then(r => {
       if(r.code == 200) numberDetail.taskId = r.ids?.[0]?.taskId || ''
     })
+    wsCbId.value = ws.value.addCb(updateSms)
+  }
+}
+
+function updateSms(data) {
+  if(data.taskId = numberDetail.taskId) {
+    console.log(data)
+    numberDetail.refreshTimes = data.count
+    if(data?.data?.lastSMSs) numberDetail.smsList = data?.data?.lastSMSs || []
   }
 }
 </script>
 
 <template>
   <div class="custom-number-detail">
-    <div class="content"></div>
+    <div class="content">
+      <NumberDetial
+        :cur-number="numberDetail.curNumber"
+        :refresh-times="numberDetail.refreshTimes"
+        :sms-list="numberDetail.smsList"
+      />
+    </div>
     <div class="footer">
       <VanField
-        v-model="curNumber" 
+        v-model="numberDetail.curNumber" 
         placeholder="请输入要查询的号码"
       />
       <VanButton type="primary" @click="handleSearch">查询</VanButton>
@@ -37,5 +53,7 @@ function handleSearch() {
 </template>
 
 <style scoped>
-
+.footer {
+  display: flex;
+}
 </style>

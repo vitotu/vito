@@ -4,7 +4,6 @@ import type { Ref } from 'vue'
 import Clipboard from "clipboard"
 import { showToast } from 'vant'
 import { Ws } from '../utils'
-import { HOST_CONFIG } from '../config'
 import { listenMainPages, listenByNumbers, stopTaskByIds } from '../apis'
 import { NumberItem, NumberDetail, NotificationMsg } from '../types'
 import NumberDetial from '../components/NumberDetial.vue'

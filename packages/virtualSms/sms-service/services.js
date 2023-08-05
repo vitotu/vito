@@ -42,7 +42,10 @@ class ws {
     setInterval(() => {
       let clients = Array.from(this.ws.clients)
       clients.forEach((client) => {
-        if(!client.isAlive) client.close()
+        if(!client.isAlive) {
+          client.close()
+          console.log('ws链接关闭, id: ', client.id)
+        }
         else client.isAlive = false
       })
     }, 60000)
@@ -108,7 +111,10 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
           },
           taskId: id,
         })
-        if(!wsStatus) tasks.removeById(id)
+        if(!wsStatus) {
+          tasks.removeById(id)
+          console.log('ws 关闭，任务对应已删除, id: ', id)
+        }
         return
       }
       let result = parseMainPage(res.body)
@@ -123,7 +129,10 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
           taskId: id,
         })
         oldRes = result
-        if(!wsStatus) tasks.removeById(id)
+        if(!wsStatus) {
+          tasks.removeById(id)
+          console.log('ws 关闭，任务对应已删除, id: ', id)
+        }
         return 200
       }
       let diffNumbers = diff2Array(result, oldRes)
@@ -136,7 +145,10 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
         taskId: id,
       })
       oldRes = result
-      if(!wsStatus) tasks.removeById(id)
+      if(!wsStatus) {
+        tasks.removeById(id)
+        console.log('ws 关闭，任务对应已删除, id: ', id)
+      }
     })
     SmsModules.set(key, id) // 将该模块标记为已启动
   }

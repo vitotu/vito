@@ -25,7 +25,7 @@ function handleSearch() {
 }
 
 function updateSms(data) {
-  if(data.taskId = numberDetail.taskId) {
+  if(data.taskId == numberDetail.taskId) {
     console.log(data)
     numberDetail.refreshTimes = data.count
     if(data?.data?.lastSMSs) numberDetail.smsList = data?.data?.lastSMSs || []

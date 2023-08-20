@@ -11,7 +11,7 @@
     </ClientOnly>
     <VanTabbar placeholder v-model="active" bind:change="">
       <VanTabbarItem name="MainNumbers" icon="home-o">首页</VanTabbarItem>
-      <VanTabbarItem name="Number" icon="setting-o">自定义</VanTabbarItem>
+      <VanTabbarItem name="Number" icon="search">自定义</VanTabbarItem>
       <VanTabbarItem name="Config" icon="setting-o">配置</VanTabbarItem>
     </VanTabbar>
   </div>

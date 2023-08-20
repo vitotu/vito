@@ -6,7 +6,7 @@ import { showToast } from 'vant'
 import { Ws } from '../utils'
 import { listenMainPages, listenByNumbers, stopTaskByIds } from '../apis'
 import { NumberItem, NumberDetail, NotificationMsg } from '../types'
-import NumberDetial from '../components/NumberDetial.vue'
+import NumberDetailVue from '../components/NumberDetail.vue'
 const count = ref(0)
 const ws:Ref<Ws> = inject('ws')
 const wsId = ws.value.wsId
@@ -164,7 +164,7 @@ function HandleCloseNumber(taskId: string) {
       round
       @close="HandleCloseNumber(numberDetail.taskId)"
     >
-      <NumberDetial
+      <NumberDetailVue
         :cur-number="numberDetail.curNumber"
         :refresh-times="numberDetail.refreshTimes"
         :sms-list="numberDetail.smsList"

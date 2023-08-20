@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { ref, inject, reactive } from 'vue'
+import { ref, inject, reactive, onDeactivated, onActivated } from 'vue'
 import type { Ref } from 'vue'
 import { Ws } from '../utils'
 import { NumberDetail } from '../types'
-import { listenByNumbers } from '../apis'
-import NumberDetial from '../components/NumberDetial.vue'
+import { listenByNumbers, stopTaskByIds } from '../apis'
+import NumberDetailVue from '../components/NumberDetail.vue'
 
 const ws:Ref<Ws> = inject('ws')
 let wsCbId = ref('')
@@ -31,12 +31,25 @@ function updateSms(data) {
     if(data?.data?.lastSMSs) numberDetail.smsList = data?.data?.lastSMSs || []
   }
 }
+onActivated(() => {
+  numberDetail.smsList = []
+  numberDetail.refreshTimes = 0
+  handleSearch()
+})
+
+onDeactivated(() => {
+  if(numberDetail.taskId){
+    stopTaskByIds([numberDetail.taskId]).then(r => console.log(r))
+  }
+})
+
+
 </script>
 
 <template>
   <div class="custom-number-detail">
     <div class="content">
-      <NumberDetial
+      <NumberDetailVue
         :cur-number="numberDetail.curNumber"
         :refresh-times="numberDetail.refreshTimes"
         :sms-list="numberDetail.smsList"

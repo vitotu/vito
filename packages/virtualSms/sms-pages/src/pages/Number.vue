@@ -17,6 +17,8 @@ let numberDetail: NumberDetail = reactive({
 
 function handleSearch() {
   if(numberDetail.curNumber) {
+    numberDetail.smsList = []
+    numberDetail.refreshTimes = 0
     listenByNumbers([numberDetail.curNumber], [ws.value.wsId]).then(r => {
       if(r.code == 200) numberDetail.taskId = r.ids?.[0]?.taskId || ''
     })

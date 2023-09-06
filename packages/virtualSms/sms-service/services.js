@@ -34,12 +34,12 @@ class ws {
         console.log(error)
         return ws.close()
       }
-      ws.on('message', (message) => {
+      ws.on('message', (message) => { // 收到对应链接心跳设置链接状态
         let res = JSON.parse(message)
         if(res.id == ws.id) ws.isAlive = true
       })
     })
-    setInterval(() => {
+    setInterval(() => { // 每6秒检查一次心跳， 若无则关闭对应ws链接
       let clients = Array.from(this.ws.clients)
       clients.forEach((client) => {
         if(!client.isAlive) {
@@ -62,11 +62,11 @@ class ws {
     } else {
       clients = Array.from(this.ws.clients)
     }
-
+    // TODO: 若clients长度为0， 的逻辑处理 isKeep状态翻转
     clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(data));
-        iskeep = true
+        iskeep = true // 只要有一个client存在且未关闭，则返回存活状态
       }
     });
     return iskeep;
@@ -98,7 +98,7 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
       // let res = { body : ''}
       // let err
       count++
-      let wsStatus = false
+      let wsStatus = false // 初始化ws链接状态
       if(err) {
          wsStatus =  ws.sendToClient({
           ids: wsIds,
@@ -111,9 +111,10 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
           },
           taskId: id,
         })
-        if(!wsStatus) {
-          tasks.removeById(id)
-          console.log('ws 关闭，任务对应已删除, id: ', id)
+        if(!wsStatus) { // 若ws已关闭，则删除对应任务id
+          let taskLeftLength = tasks.removeById(id)
+          console.log('ws 关闭，任务对应已删除, id: ', id, '剩余任务数： ', taskLeftLength)
+          SmsModules.set(key, null) // 由于任务都已关闭，重置模块启动标记
         }
         return
       }
@@ -130,8 +131,9 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
         })
         oldRes = result
         if(!wsStatus) {
-          tasks.removeById(id)
-          console.log('ws 关闭，任务对应已删除, id: ', id)
+          let taskLeftLength = tasks.removeById(id)
+          console.log('ws 关闭，任务对应已删除, id: ', id, '剩余任务数： ', taskLeftLength)
+          SmsModules.set(key, null) // 由于任务都已关闭，重置模块启动标记
         }
         return 200
       }
@@ -146,8 +148,9 @@ exports.SmsService = async function(wsIds, key = 'sms24') {
       })
       oldRes = result
       if(!wsStatus) {
-        tasks.removeById(id)
-        console.log('ws 关闭，任务对应已删除, id: ', id)
+        let taskLeftLength = tasks.removeById(id)
+        console.log('ws 关闭，任务对应已删除, id: ', id, '剩余任务数： ', taskLeftLength)
+        SmsModules.set(key, null) // 由于任务都已关闭，重置模块启动标记
       }
     })
     SmsModules.set(key, id) // 将该模块标记为已启动

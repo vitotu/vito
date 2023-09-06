@@ -37,6 +37,11 @@ exports.LoopTask =  class {
   removeById(id) {
     delete this.cb[id]
     this.ids = this.ids.filter(i => i != id)
+    if(this.ids.length === 0){ // 任务数为0， 则自动停止任务
+      this.stop()
+      return 0
+    }
+    return this.ids.length
   }
   get Status() {
     return Boolean(this.timer)

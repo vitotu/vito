@@ -1,16 +1,20 @@
+const fs = require('fs')
+let config = {}
+
+try {
+  config = JSON.parse(fs.readFileSync('../config.json', 'utf-8'))
+} catch (e) {
+  console.log(e)
+}
 
 exports.host = {
-  local: {
-    host: 'http://localhost',
-    post: 3080
-  }
+  local: config?.local
 }
 
 exports.config = {
-  "proxy":"http://192.168.168.95:10809",
-  "mainPath":"https://sms24.me/en/numbers",
-  "numberUrlPrefix":"https://sms24.me/en/numbers/"
+  ...config
 }
+
 const SmsModules = new Map()
 SmsModules.set('sms24', null)
 

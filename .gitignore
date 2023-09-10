@@ -1,2 +1,3 @@
 **/node_modules/**
 **/.demo/**
+**/packages/**/config.json

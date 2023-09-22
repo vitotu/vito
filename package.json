@@ -5,11 +5,13 @@
   "main": "index.js",
   "workspaces": [
     "packages/virtualSms/sms-service",
-    "packages/virtualSms/sms-pages"
+    "packages/virtualSms/sms-pages",
+    "packages/file-server"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sms": "npm run dev -w=sms-pages | npm run dev -w=sms-service"
+    "sms": "npm run dev -w=sms-pages | npm run dev -w=sms-service",
+    "file-server": "npm run dev -w=file-server"
   },
   "author": "",
   "license": "ISC",

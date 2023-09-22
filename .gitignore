@@ -1,3 +1,5 @@
 **/node_modules/**
 **/.demo/**
 **/packages/**/config.json
+
+**/file-server/resource/**

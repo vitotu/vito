@@ -6,7 +6,8 @@
   "workspaces": [
     "packages/virtualSms/sms-service",
     "packages/virtualSms/sms-pages",
-    "packages/file-server"
+    "packages/file-server/file-service",
+    "packages/file-server/file-pages"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

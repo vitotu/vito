@@ -2,4 +2,4 @@
 **/.demo/**
 **/packages/**/config.json
 
-**/file-server/resource/**
+**/resource/**

@@ -10,8 +10,8 @@ function start() {
   app.use(cors())
   app.use(router.routes()).use(router.allowedMethods());
 
-  let server =  app.listen(host.local.post, () => {
-    console.log(`server is running at ${host.local.host}:${host.local.post}`)
+  let server =  app.listen(host.local.port, () => {
+    console.log(`server is running at ${host.local.host}:${host.local.port}`)
   })
 
   const wss = ws.init(server, '')

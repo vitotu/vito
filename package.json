@@ -12,7 +12,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "sms": "npm run dev -w=sms-pages | npm run dev -w=sms-service",
-    "file-server": "npm run dev -w=file-pages | npm run dev -w=file-service"
+    "file-server": "npm run dev -w=file-service"
   },
   "author": "",
   "license": "ISC",

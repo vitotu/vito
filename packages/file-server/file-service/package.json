@@ -1,13 +1,22 @@
 {
   "name": "file-service",
-  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitotu/vito.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitotu/vito/issues"
+  },
+  "homepage": "https://github.com/vitotu/vito#readme",
   "dependencies": {
     "@koa/cors": "^4.0.0",
     "@koa/router": "^12.0.0",
@@ -19,7 +28,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
-  },
-  "author": "",
-  "license": "ISC"
+  }
 }

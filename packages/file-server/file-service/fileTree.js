@@ -1,4 +1,4 @@
-import fs from 'fs';
+const fs = require('fs')
 
 function getFileTree(path) {
   const stats = fs.statSync(path);

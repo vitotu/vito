@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "vito entry all in one",
   "main": "index.js",
+  "type": "module",
   "workspaces": [
     "packages/virtualSms/sms-service",
     "packages/virtualSms/sms-pages",

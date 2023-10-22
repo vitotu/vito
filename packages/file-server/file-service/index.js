@@ -4,7 +4,7 @@ const cors = require('@koa/cors')
 const staticServe = require('koa-static')
 const path = require('path')
 
-const staticPath = './resource' // TODO: move to config.json
+const staticPath = './' // TODO: move to config.json
 const { router } = require('./routes.js')
 
 let configData

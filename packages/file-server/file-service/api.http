@@ -1,0 +1,5 @@
+### 获取文件路径
+get http://localhost:3081/resource/dark-file.json http/1.1
+
+### 服务健康检查
+get http://localhost:3081 http/1.1

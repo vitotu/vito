@@ -1,14 +1,27 @@
 <script setup>
-import {} from 'vue'
-import BreadCrumb from '../components/BreadCrumb.vue';
-const path = ['a','b','c']
+import { onMounted, computed } from 'vue'
+import BreadCrumb from '../components/BreadCrumb.vue'
+import { useFileTreeStore } from '../stores/fileTree.js'
+const fileTreeStore = useFileTreeStore()
+onMounted(async () => {
+  const result = await fileTreeStore.initFileTree()
+})
+
+const mediaArray = computed(() => {
+  const children = fileTreeStore.currentNode?.children
+  return children?.filter(node => {
+    if(node.extendName.match(/ts|mp4|avi|rmvb||jpg|jpeg|png|gif/g)) return true
+    else return false
+  })
+})
+
 </script>
 
 <template>
   <div class="files-container">
-    <BreadCrumb :path="path"/>
+    <BreadCrumb :path="fileTreeStore.pathStack"/>
     <div class="content">
-
+      {{ mediaArray }}
     </div>
     <div class="hover-menu"></div>
   </div>

@@ -10,7 +10,6 @@ try {
 } catch (error) {
   console.log('read config file error: ', error)
 }
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [

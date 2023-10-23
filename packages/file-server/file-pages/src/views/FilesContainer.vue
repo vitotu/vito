@@ -21,7 +21,7 @@ const mediaArray = computed(() => {
   <div class="files-container">
     <BreadCrumb :path="fileTreeStore.pathStack"/>
     <div class="content">
-      {{ mediaArray }}
+      {{ mediaArray.length }}
     </div>
     <div class="hover-menu"></div>
   </div>

@@ -10,10 +10,14 @@ onMounted(async () => {
 const mediaArray = computed(() => {
   const children = fileTreeStore.currentNode?.children
   return children?.filter(node => {
-    if(node.extendName.match(/ts|mp4|avi|rmvb||jpg|jpeg|png|gif/g)) return true
+    if(node.extendName.match(/ts|mp4|avi|rmvb||jpg|jpeg|png|gif/g)?.[0]) return true
     else return false
-  })
+  }) || []
 })
+
+function onOpenMenu() {
+
+}
 
 </script>
 
@@ -23,7 +27,10 @@ const mediaArray = computed(() => {
     <div class="content">
       {{ mediaArray.length }}
     </div>
-    <div class="hover-menu"></div>
+    <div
+      class="hover-menu"
+      @click="onOpenMenu"
+    ></div>
   </div>
 </template>
 

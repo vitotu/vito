@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import BreadCrumb from '../components/BreadCrumb.vue'
 import { useFileTreeStore } from '../stores/fileTree.js'
 const fileTreeStore = useFileTreeStore()
@@ -15,8 +15,10 @@ const mediaArray = computed(() => {
   }) || []
 })
 
-function onOpenMenu() {
+let showMenu = ref(false)
 
+function onOpenMenu() {
+  showMenu.value = !showMenu.value
 }
 
 </script>
@@ -31,6 +33,13 @@ function onOpenMenu() {
       class="hover-menu"
       @click="onOpenMenu"
     ></div>
+    <van-popup
+      v-model:show="showMenu"
+      position="right"
+      :style="{ height: '100%'}"
+    >
+      currentNode path
+    </van-popup>
   </div>
 </template>
 

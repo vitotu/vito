@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, computed, ref } from 'vue'
 import BreadCrumb from '../components/BreadCrumb.vue'
+import SideMenuContent from '../components/SideMenuContent.vue';
 import { useFileTreeStore } from '../stores/fileTree.js'
 const fileTreeStore = useFileTreeStore()
 onMounted(async () => {
@@ -37,8 +38,9 @@ function onOpenMenu() {
       v-model:show="showMenu"
       position="right"
       :style="{ height: '100%'}"
+      class="side-menu"
     >
-      currentNode path
+      <SideMenuContent/>
     </van-popup>
   </div>
 </template>
@@ -65,5 +67,8 @@ function onOpenMenu() {
   height: 32px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.3);
+}
+.side-menu {
+  max-width: 60%;
 }
 </style>

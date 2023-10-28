@@ -40,7 +40,9 @@ function onOpenMenu() {
       :style="{ height: '100%'}"
       class="side-menu"
     >
-      <SideMenuContent/>
+      <SideMenuContent
+        :showMenu="showMenu"
+      />
     </van-popup>
   </div>
 </template>

@@ -1,8 +1,9 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useFileTreeStore } from '../stores/fileTree';
 
 const fileTreeStore = useFileTreeStore()
+const scrollMenu = ref(null)
 
 const subFolders = computed(() => {
   const children = fileTreeStore.currentNode?.children
@@ -12,10 +13,31 @@ const subFolders = computed(() => {
   })?.reverse() || []
 })
 
+const unWatchEffect = watchEffect(async () => {
+  console.log(props.showMenu)
+  if(props.showMenu) {
+    try {
+      scrollMenu.value.scrollTop = scrollMenu.value.scrollHeight
+    } catch (error) {
+      console.log(error)
+    }
+  }
+})
+
+const props = defineProps({
+  showMenu: {
+    type: Boolean,
+    required: true
+  }
+})
+
 </script>
 
 <template>
-  <div class="side-menu-content">
+  <div
+    class="side-menu-content"
+    ref="scrollMenu"
+  >
     <div
       v-for="(node, index) in subFolders"
       :key="node.name + index"

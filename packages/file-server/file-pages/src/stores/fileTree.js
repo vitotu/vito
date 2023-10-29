@@ -16,11 +16,21 @@ export const useFileTreeStore = defineStore('fileTree', {
       if(fileTree?.name === 'dark') {
         this.fileTree = fileTree
         if(fileTree?.children?.length) {
-          this.pathStack = [ fileTree.name ]
+          this.pathStack = [ fileTree ]
           this.currentNode = fileTree
         }
       }
       return fileTree
+    },
+    pushStack(node) {
+      this.pathStack.push(node)
+      this.currentNode = node
+    },
+    popStack(){
+      if(this.pathStack.length > 1) {
+        this.pathStack.pop()
+        this.currentNode = this.pathStack[this.pathStack.length - 1]
+      }
     }
   }
 })

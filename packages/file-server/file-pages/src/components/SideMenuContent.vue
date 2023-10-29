@@ -14,7 +14,6 @@ const subFolders = computed(() => {
 })
 
 const unWatchEffect = watchEffect(async () => {
-  console.log(props.showMenu)
   if(props.showMenu) {
     try {
       scrollMenu.value.scrollTop = scrollMenu.value.scrollHeight
@@ -31,6 +30,14 @@ const props = defineProps({
   }
 })
 
+function onSubFolder(node) {
+  fileTreeStore.pushStack(node)
+}
+
+function onPreFolder() {
+  fileTreeStore.popStack()
+}
+
 </script>
 
 <template>
@@ -38,25 +45,44 @@ const props = defineProps({
     class="side-menu-content"
     ref="scrollMenu"
   >
-    <div
-      v-for="(node, index) in subFolders"
-      :key="node.name + index"
-      class="menu-item"
-    >
-      {{ node.name }}
-    </div>
-    <div class="menu-preview">上一级</div>
+    <van-cell-group>
+      <van-cell
+        v-for="(node, index) in subFolders"
+        :key="node.name + index"
+        is-link
+        @click="onSubFolder(node)"
+      >
+        <template #title>
+          <span>{{ node.name }}</span>
+        </template>
+      </van-cell>
+    </van-cell-group>
+    <van-cell
+      v-show="fileTreeStore.pathStack.length > 1"
+      class="menu-preview"
+      title="上一级"
+      icon="arrow-left"
+      @click="onPreFolder"
+    ></van-cell>
   </div>
 </template>
 
 <style lang="less" scoped>
 .side-menu-content {
+  position: relative;
   overflow-y: auto;
   color: black;
   height: 100%;
   width: 100%;
+  padding-bottom: 30px;
   .menu-item {
     text-overflow: ellipsis;
+  }
+  .menu-preview {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 }
 </style>

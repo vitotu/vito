@@ -1,11 +1,11 @@
 <template>
   <div class="bread-crumb">
     <span
-      v-for="(item, index) in path"
+      v-for="(node, index) in path"
       :key="index"
     >
       <i v-if="index !== 0">{{ '/' }}</i>
-      <span>{{ item }}</span>
+      <span>{{ node.name }}</span>
     </span>
   </div>
 </template>

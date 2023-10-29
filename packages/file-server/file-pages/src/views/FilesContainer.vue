@@ -1,11 +1,13 @@
 <script setup>
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, reactive } from 'vue'
 import BreadCrumb from '../components/BreadCrumb.vue'
 import SideMenuContent from '../components/SideMenuContent.vue';
 import { useFileTreeStore } from '../stores/fileTree.js'
+import { paginationConfig } from '../config'
 const fileTreeStore = useFileTreeStore()
 onMounted(async () => {
   const result = await fileTreeStore.initFileTree()
+  onListLoad() // 首屏检查后数据还未请求到，需要等到数据加载完成后重新触发一次ListLoad回调
 })
 
 const mediaArray = computed(() => {
@@ -15,6 +17,30 @@ const mediaArray = computed(() => {
     else return false
   }) || []
 })
+
+const currentList = reactive([])
+
+const pagination = reactive({
+  currentNumber: 0,
+  total: mediaArray.length / paginationConfig.NumbersPerPage,
+  perNumber: paginationConfig.NumbersPerPage
+})
+
+const listLoading = ref(false)
+const listFinished = ref(false)
+
+function onListLoad() {
+  console.log('onLoad', pagination.currentNumber)
+  currentList.push.apply(currentList,
+    mediaArray.value.slice(
+      pagination.currentNumber * pagination.perNumber,
+      (pagination.currentNumber + 1) * pagination.perNumber
+    )
+  )
+  pagination.currentNumber++
+  listLoading.value = false
+  if(currentList.length >= mediaArray.length) listFinished.value = true
+}
 
 let showMenu = ref(false)
 
@@ -28,7 +54,14 @@ function onOpenMenu() {
   <div class="files-container">
     <BreadCrumb :path="fileTreeStore.pathStack"/>
     <div class="content">
-      {{ mediaArray.length }}
+      <van-list
+        v-model:loading="listLoading"
+        :finished="listFinished"
+        finished-text="no more"
+        @load="onListLoad"
+      >
+        <van-cell v-for="(node, index) in currentList" :key="node.name" :title="`${index}+${node.name}.${node.extendName}`"></van-cell>
+      </van-list>
     </div>
     <div
       class="hover-menu"
@@ -71,6 +104,6 @@ function onOpenMenu() {
   background-color: rgba(255, 255, 255, 0.3);
 }
 .side-menu {
-  max-width: 60%;
+  width: 60%;
 }
 </style>

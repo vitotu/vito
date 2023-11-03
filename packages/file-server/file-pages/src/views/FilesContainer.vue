@@ -3,7 +3,7 @@ import { onMounted, computed, ref, reactive } from 'vue'
 import BreadCrumb from '../components/BreadCrumb.vue'
 import SideMenuContent from '../components/SideMenuContent.vue';
 import { useFileTreeStore } from '../stores/fileTree.js'
-import { paginationConfig } from '../config'
+import { paginationConfig, fileTypeReg } from '../config'
 const fileTreeStore = useFileTreeStore()
 onMounted(async () => {
   const result = await fileTreeStore.initFileTree()
@@ -46,6 +46,12 @@ let showMenu = ref(false)
 
 function onOpenMenu() {
   showMenu.value = !showMenu.value
+}
+
+function getComponentName(name) {
+  if(name.match(fileTypeReg.IMAGE)?.[0]) return 'ImgContainer'
+  else if (name.match(fileTypeReg.VIDEO)?.[0]) return 'VideoContainer'
+  else return 'TextContainer'
 }
 
 </script>

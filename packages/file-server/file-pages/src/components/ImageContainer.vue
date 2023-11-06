@@ -17,5 +17,11 @@ const props = defineProps({
 </template>
 
 <style lang="less" scoped>
-
+.image-container {
+  width: 100%;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
 </style>

@@ -1,12 +1,21 @@
 <template>
   <div>
-
+    <ImageContainer
+      v-if="getComponentName(node.name)"
+    />
   </div>
 </template>
 
 <script setup>
 import ImageContainer from './ImageContainer.vue'
 import { fileTypeReg } from '../config'
+
+const props = defineProps({
+  node: {
+    type: Object,
+    required: true
+  }
+})
 
 function getComponentName(name) {
   if(name.match(fileTypeReg.IMAGE)?.[0]) return 'ImgContainer'

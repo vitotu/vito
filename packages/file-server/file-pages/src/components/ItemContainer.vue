@@ -1,7 +1,7 @@
 <template>
   <div>
     <ImageContainer
-      v-if="getComponentName(node.name)"
+      v-if="getComponentName(node.name) == 'ImgContainer'"
     />
   </div>
 </template>

@@ -12,7 +12,7 @@ const props = defineProps({
 
 <template>
   <div class="image-container">
-    <img :src="node.fullPath" alt="">
+    <img :src="node.fullPath" :alt="node.name">
   </div>
 </template>
 

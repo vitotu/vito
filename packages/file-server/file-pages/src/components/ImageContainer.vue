@@ -1,5 +1,6 @@
 <script setup>
 import {} from 'vue'
+import { BackHost } from '../config'
 
 const props = defineProps({
   node: {
@@ -8,11 +9,15 @@ const props = defineProps({
   }
 })
 
+function getUrl(fullPath) {
+  return `${BackHost.host}${fullPath.substr(1)}`
+}
+
 </script>
 
 <template>
   <div class="image-container">
-    <img :src="node.fullPath" :alt="node.name">
+    <img :src="getUrl(node.fullPath)" :alt="node.name">
   </div>
 </template>
 

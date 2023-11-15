@@ -1,9 +1,12 @@
 <template>
-  <div>
-    <ImageContainer
-      v-if="getComponentName(node.name) == 'ImgContainer'"
-    />
-  </div>
+  <ImageContainer
+    v-if="getComponentName(node.extendName) == 'ImgContainer'"
+    :node="node"
+  />
+  <van-cell
+    v-else
+    :title="`${index}+${node.name}.${node.extendName}`"
+  ></van-cell>
 </template>
 
 <script setup>
@@ -14,11 +17,18 @@ const props = defineProps({
   node: {
     type: Object,
     required: true
+  },
+  index: {
+    type: Number,
   }
 })
 
 function getComponentName(name) {
-  if(name.match(fileTypeReg.IMAGE)?.[0]) return 'ImgContainer'
+  console.log(name)
+  if(name.match(fileTypeReg.IMAGE)?.[0]){
+    console.log('image', name)
+    return 'ImgContainer'
+  }
   else if (name.match(fileTypeReg.VIDEO)?.[0]) return 'VideoContainer'
   else return 'TextContainer'
 }

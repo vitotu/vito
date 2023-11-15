@@ -2,6 +2,7 @@
 import { onMounted, computed, ref, reactive } from 'vue'
 import BreadCrumb from '../components/BreadCrumb.vue'
 import SideMenuContent from '../components/SideMenuContent.vue';
+import ItemContainer from '../components/ItemContainer.vue';
 import { useFileTreeStore } from '../stores/fileTree.js'
 import { paginationConfig } from '../config'
 const fileTreeStore = useFileTreeStore()
@@ -13,7 +14,7 @@ onMounted(async () => {
 const mediaArray = computed(() => {
   const children = fileTreeStore.currentNode?.children
   return children?.filter(node => {
-    if(node.extendName.match(/ts|mp4|avi|rmvb||jpg|jpeg|png|gif/g)?.[0]) return true
+    if(['ts', 'mp4', 'avi', 'rmvb', 'jpg', 'jpeg', 'png', 'gif'].includes(node.extendName)) return true
     else return false
   }) || []
 })
@@ -30,7 +31,7 @@ const listLoading = ref(false)
 const listFinished = ref(false)
 
 function onListLoad() {
-  console.log('onLoad', pagination.currentNumber)
+  if(!fileTreeStore.currentNode?.name) return // 数据加载完成之前不调用load
   currentList.push.apply(currentList,
     mediaArray.value.slice(
       pagination.currentNumber * pagination.perNumber,
@@ -60,7 +61,12 @@ function onOpenMenu() {
         finished-text="no more"
         @load="onListLoad"
       >
-        <van-cell v-for="(node, index) in currentList" :key="node.name" :title="`${index}+${node.name}.${node.extendName}`"></van-cell>
+        <ItemContainer
+          v-for="(node, index) in currentList"
+          :key="node.name"
+          :node="node"
+          :index="index"
+        />
       </van-list>
     </div>
     <div
@@ -101,7 +107,7 @@ function onOpenMenu() {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .side-menu {
   width: 60%;

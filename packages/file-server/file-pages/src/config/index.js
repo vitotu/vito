@@ -4,8 +4,8 @@ export const paginationConfig = {
 }
 
 export const fileTypeReg = {
-  IMAGE: /jpg/g,
-  VIDEO: /mp4/g,
+  IMAGE: /jpg|png|jpeg|gif/g,
+  VIDEO: /mp4|avi|ts|rmvb/g,
 }
 
 export const BackHost = {

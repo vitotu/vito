@@ -49,6 +49,22 @@ function onOpenMenu() {
   showMenu.value = !showMenu.value
 }
 
+function onMenuChange() {
+  Object.assign(pagination, reactive({
+    currentNumber: 0,
+    total: mediaArray.length / paginationConfig.NumbersPerPage,
+    perNumber: paginationConfig.NumbersPerPage
+  }))
+  currentList.splice(
+    0,
+    Number.POSITIVE_INFINITY,
+    ...mediaArray.value.slice(
+      pagination.currentNumber * pagination.perNumber,
+      (pagination.currentNumber + 1) * pagination.perNumber
+    )
+  )
+}
+
 </script>
 
 <template>
@@ -56,6 +72,7 @@ function onOpenMenu() {
     <BreadCrumb :path="fileTreeStore.pathStack"/>
     <div class="content">
       <van-list
+        class="list"
         v-model:loading="listLoading"
         :finished="listFinished"
         finished-text="no more"
@@ -81,6 +98,7 @@ function onOpenMenu() {
     >
       <SideMenuContent
         :showMenu="showMenu"
+        @current-node-change="onMenuChange"
       />
     </van-popup>
   </div>
@@ -99,6 +117,11 @@ function onOpenMenu() {
   width: 100%;
   overflow: auto;
   flex: 1;
+}
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 .hover-menu {
   position: fixed;

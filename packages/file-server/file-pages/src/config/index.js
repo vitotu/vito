@@ -9,5 +9,6 @@ export const fileTypeReg = {
 }
 
 export const BackHost = {
-  host: 'http://127.0.0.1:3081'
+  host: 'http://127.0.0.1:3081',
+  port: 3081
 }

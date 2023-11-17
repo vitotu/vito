@@ -1,6 +1,6 @@
 <script setup>
 import {} from 'vue'
-import { BackHost } from '../config'
+import { getResourceUrl } from '../utils'
 
 const props = defineProps({
   node: {
@@ -9,21 +9,20 @@ const props = defineProps({
   }
 })
 
-function getUrl(fullPath) {
-  return `${BackHost.host}${fullPath.substr(1)}`
-}
-
 </script>
 
 <template>
   <div class="image-container">
-    <img :src="getUrl(node.fullPath)" :alt="node.name">
+    <img
+      v-lazy="getResourceUrl(node.fullPath)"
+      :alt="node.name"
+    >
   </div>
 </template>
 
 <style lang="less" scoped>
 .image-container {
-  width: 100%;
+  width: 45%;
   img {
     width: 100%;
     height: auto;

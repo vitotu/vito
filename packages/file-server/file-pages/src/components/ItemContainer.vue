@@ -3,6 +3,10 @@
     v-if="getComponentName(node.extendName) == 'ImgContainer'"
     :node="node"
   />
+  <VideoContainer
+    v-else-if="getComponentName(node.extendName) == 'VideoContainer'"
+    :node="node"
+  />
   <van-cell
     v-else
     :title="`${index}+${node.name}.${node.extendName}`"
@@ -11,6 +15,7 @@
 
 <script setup>
 import ImageContainer from './ImageContainer.vue'
+import VideoContainer from './VideoContainer.vue';
 import { fileTypeReg } from '../config'
 
 const props = defineProps({
@@ -24,11 +29,7 @@ const props = defineProps({
 })
 
 function getComponentName(name) {
-  console.log(name)
-  if(name.match(fileTypeReg.IMAGE)?.[0]){
-    console.log('image', name)
-    return 'ImgContainer'
-  }
+  if(name.match(fileTypeReg.IMAGE)?.[0]) return 'ImgContainer'
   else if (name.match(fileTypeReg.VIDEO)?.[0]) return 'VideoContainer'
   else return 'TextContainer'
 }

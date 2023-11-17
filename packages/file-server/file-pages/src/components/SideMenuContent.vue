@@ -30,12 +30,16 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['currentNodeChange'])
+
 function onSubFolder(node) {
   fileTreeStore.pushStack(node)
+  emit('currentNodeChange')
 }
 
 function onPreFolder() {
   fileTreeStore.popStack()
+  emit('currentNodeChange')
 }
 
 </script>

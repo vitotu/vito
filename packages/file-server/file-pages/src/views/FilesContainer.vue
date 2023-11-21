@@ -1,10 +1,13 @@
 <script setup>
 import { onMounted, computed, ref, reactive } from 'vue'
+import { showImagePreview } from 'vant'
 import BreadCrumb from '../components/BreadCrumb.vue'
 import SideMenuContent from '../components/SideMenuContent.vue';
 import ItemContainer from '../components/ItemContainer.vue';
 import { useFileTreeStore } from '../stores/fileTree.js'
 import { paginationConfig } from '../config'
+import { getResourceUrl } from '../utils'
+
 const fileTreeStore = useFileTreeStore()
 onMounted(async () => {
   const result = await fileTreeStore.initFileTree()
@@ -63,6 +66,18 @@ function onMenuChange() {
       (pagination.currentNumber + 1) * pagination.perNumber
     )
   )
+  showMenu.value = false
+}
+
+function onPreview(type, node) {
+  console.log(type)
+  if(type == 'image') {
+    showImagePreview({
+      images: [
+        getResourceUrl(node.fullPath)
+      ]
+    })
+  }
 }
 
 </script>
@@ -83,6 +98,7 @@ function onMenuChange() {
           :key="node.name"
           :node="node"
           :index="index"
+          @preview="(e) => onPreview(e, node)"
         />
       </van-list>
     </div>

@@ -2,10 +2,12 @@
   <ImageContainer
     v-if="getComponentName(node.extendName) == 'ImgContainer'"
     :node="node"
+    @click="onPreview('image')"
   />
   <VideoContainer
     v-else-if="getComponentName(node.extendName) == 'VideoContainer'"
     :node="node"
+    @click="onPreview('video')"
   />
   <van-cell
     v-else
@@ -33,6 +35,13 @@ function getComponentName(name) {
   else if (name.match(fileTypeReg.VIDEO)?.[0]) return 'VideoContainer'
   else return 'TextContainer'
 }
+
+const emit = defineEmits(['preview'])
+
+function onPreview(type) {
+  emit('preview', type)
+}
+
 </script>
 
 <style lang="less" scoped>

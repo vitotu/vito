@@ -2,7 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { Popup, Cell, CellGroup, List, TextEllipsis, Lazyload } from 'vant'
+import { Popup, Cell, CellGroup, List, TextEllipsis, Lazyload, ImagePreview } from 'vant'
 import 'vant/lib/index.css';
 import App from './App.vue'
 import router from './router'
@@ -19,6 +19,7 @@ app.use(Lazyload, {
   lazyComponent: true,
   loading: loadimage,
 })
+app.use(ImagePreview)
 app.use(createPinia())
 app.use(router)
 

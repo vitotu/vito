@@ -70,7 +70,6 @@ function onMenuChange() {
 }
 
 function onPreview(type, node) {
-  console.log(type)
   if(type == 'image') {
     showImagePreview({
       images: [

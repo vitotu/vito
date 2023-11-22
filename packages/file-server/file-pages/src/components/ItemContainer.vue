@@ -7,7 +7,6 @@
   <VideoContainer
     v-else-if="getComponentName(node.extendName) == 'VideoContainer'"
     :node="node"
-    @click="onPreview('video')"
   />
   <van-cell
     v-else

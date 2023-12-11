@@ -14,7 +14,12 @@
       <div v-if="node.extendName == 'ts'">
         <a :href="`xplayer://play?url=http:${videoSrc}`">play video in xplayer</a>
       </div>
-      <video v-else controls width="250">
+      <video
+        v-else 
+        ref="videoPlayer"
+        controls 
+        width="250"
+      >
         <source
           :type="node.extendName == 'ts' ? 'application/x-mpegurl' : ''"
           :src="videoSrc"
@@ -26,8 +31,9 @@
 
 <script setup>
 // TODO: 视频因缺少流媒体， 采用点击弹窗的形式播放， ts使用deeplink跳转至xplayer播放
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import { getResourceUrl } from '../utils'
+import videojs from 'video.js'
 
 const props = defineProps({
   node: {
@@ -48,6 +54,18 @@ function onVideoPlay() {
 function onCloseVide() {
   showVideo.value = false
 }
+
+player = reactive(null)
+videoPlayer = ref(null)
+onMounted(() => {
+  player = videojs(videoPlayer, {}, () {
+    player?.log('ready')
+  })
+})
+
+onBeforeUnmount(() => {
+  if(player) player?.dispose()
+})
 
 </script>
 

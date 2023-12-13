@@ -58,7 +58,16 @@ function onCloseVide() {
 player = reactive(null)
 videoPlayer = ref(null)
 onMounted(() => {
-  player = videojs(videoPlayer, {}, () {
+  player = videojs(videoPlayer, {
+    autoplay: false,
+    controls: true,
+    sources: [
+      {
+        src: videoSrc,
+        type: ''
+      }
+    ]
+  }, () => {
     player?.log('ready')
   })
 })

@@ -31,7 +31,7 @@
 
 <script setup>
 // TODO: 视频因缺少流媒体， 采用点击弹窗的形式播放， ts使用deeplink跳转至xplayer播放
-import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { getResourceUrl } from '../utils'
 import videojs from 'video.js'
 
@@ -55,10 +55,11 @@ function onCloseVide() {
   showVideo.value = false
 }
 
-player = reactive(null)
-videoPlayer = ref(null)
-onMounted(() => {
-  player = videojs(videoPlayer, {
+let player = reactive(null)
+let videoPlayer = ref(null)
+onMounted(async () => {
+  await nextTick()
+  player = videojs(videoPlayer.value, {
     autoplay: false,
     controls: true,
     sources: [

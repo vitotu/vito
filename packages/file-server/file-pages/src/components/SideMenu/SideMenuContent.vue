@@ -1,6 +1,6 @@
 <script setup>
-import { computed, onMounted, ref, watchEffect } from 'vue'
-import { useFileTreeStore } from '../stores/fileTree';
+import { computed, ref, watchEffect, } from 'vue'
+import { useFileTreeStore } from '../../stores/fileTree';
 
 const fileTreeStore = useFileTreeStore()
 const scrollMenu = ref(null)

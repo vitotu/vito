@@ -2,11 +2,11 @@
 import { onMounted, computed, ref, reactive } from 'vue'
 import { showImagePreview } from 'vant'
 import BreadCrumb from '../components/BreadCrumb.vue'
-import SideMenuContent from '../components/SideMenuContent.vue';
 import ItemContainer from '../components/ItemContainer.vue';
 import { useFileTreeStore } from '../stores/fileTree.js'
 import { paginationConfig } from '../config'
 import { getResourceUrl } from '../utils'
+import SideMenu from '../components/SideMenu/index.vue';
 
 const fileTreeStore = useFileTreeStore()
 onMounted(async () => {
@@ -26,7 +26,7 @@ const currentList = reactive([])
 
 const pagination = reactive({
   currentNumber: 0,
-  total: mediaArray.length / paginationConfig.NumbersPerPage,
+  total: mediaArray.value.length / paginationConfig.NumbersPerPage,
   perNumber: paginationConfig.NumbersPerPage
 })
 
@@ -43,19 +43,15 @@ function onListLoad() {
   )
   pagination.currentNumber++
   listLoading.value = false
-  if(currentList.length >= mediaArray.length) listFinished.value = true
+  if(currentList.length >= mediaArray.value.length) listFinished.value = true
 }
 
 let showMenu = ref(false)
 
-function onOpenMenu() {
-  showMenu.value = !showMenu.value
-}
-
 function onMenuChange() {
   Object.assign(pagination, reactive({
     currentNumber: 0,
-    total: mediaArray.length / paginationConfig.NumbersPerPage,
+    total: mediaArray.value.length / paginationConfig.NumbersPerPage,
     perNumber: paginationConfig.NumbersPerPage
   }))
   currentList.splice(
@@ -67,6 +63,10 @@ function onMenuChange() {
     )
   )
   showMenu.value = false
+}
+
+function onShowChange(val) {
+  showMenu.value = val
 }
 
 function onPreview(type, node) {
@@ -101,21 +101,11 @@ function onPreview(type, node) {
         />
       </van-list>
     </div>
-    <div
-      class="hover-menu"
-      @click="onOpenMenu"
-    ></div>
-    <van-popup
-      v-model:show="showMenu"
-      position="right"
-      :style="{ height: '100%'}"
-      class="side-menu"
-    >
-      <SideMenuContent
-        :showMenu="showMenu"
-        @current-node-change="onMenuChange"
-      />
-    </van-popup>
+    <SideMenu
+      :showMenu="showMenu"
+      @showChange="onShowChange"
+      @menuChange="onMenuChange"
+    />
   </div>
 </template>
 
@@ -138,16 +128,5 @@ function onPreview(type, node) {
   flex-wrap: wrap;
   justify-content: space-around;
 }
-.hover-menu {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-.side-menu {
-  width: 60%;
-}
+
 </style>

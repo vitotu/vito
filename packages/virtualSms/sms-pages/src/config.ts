@@ -1,17 +1,11 @@
-import fs from 'fs'
-
-let config:any = {}
-
-try {
-  config = JSON.parse(fs.readFileSync('../../config.json', 'utf-8'))
-} catch (error) {
-  console.log(error)
-}
+import ConfigData from '../../envConfig.json'
+const mode = process.env.target || 'dev'
+let config:any = ConfigData[mode] || {}
 
 const devConfig:any = config?.local || {}
 
 export const HOST_CONFIG = {
-  api: 'http://localhost',
+  api: 'http://' + devConfig.host,
   apiPort: devConfig.port || 3080,
   getApiPrefix () {
     let url ='http://' +  window.location.host.split(':')[0] + ':' + this.apiPort

@@ -4,15 +4,13 @@
   "description": "vito entry all in one",
   "main": "index.js",
   "workspaces": [
-    "packages/virtualSms/sms-service",
-    "packages/virtualSms/sms-pages",
-    "packages/file-server/file-service",
-    "packages/file-server/file-pages"
+    "packages/**"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sms": "npm run dev -w=sms-pages | npm run dev -w=sms-service",
-    "file-server": "npm run dev -w=file-pages | npm run dev -w=file-service"
+    "dev-sms": "npm run dev -w=sms-pages | npm run dev -w=sms-service",
+    "dev-fileServer": "npm run dev -w=file-pages | npm run dev -w=file-service",
+    "build-sms": "npm run build -w=sms-pages | npm run dev -w=sms-service"
   },
   "author": "",
   "license": "ISC",

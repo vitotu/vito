@@ -1,0 +1,10 @@
+{
+  "local": {
+    "host": "http://localhost",
+    "port": 3081
+  },
+  "pageLocal": {
+    "host": "http://localhost",
+    "port": 8081
+  }
+}

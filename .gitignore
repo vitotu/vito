@@ -1,5 +1,5 @@
 **/node_modules/**
 **/.demo/**
-**/packages/**/config.json
+**/packages/**/envConfig.json
 
 **/resource/**

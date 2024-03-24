@@ -1,5 +1,6 @@
 {
   "name": "sms-pages",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "nuxt build",
@@ -23,7 +24,6 @@
     "nanoid": "^4.0.2"
   },
   "description": "Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.",
-  "version": "1.0.0",
   "main": "index.ts",
   "repository": {
     "type": "git",

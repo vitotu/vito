@@ -1,11 +1,6 @@
-const fs = require('fs')
-let config = {}
-
-try {
-  config = JSON.parse(fs.readFileSync('../config.json', 'utf-8'))
-} catch (e) {
-  console.log(e)
-}
+const ConfigData = require('../envConfig.json')
+const mode = process.env.target || 'dev'
+let config = ConfigData[mode] || {}
 
 exports.host = {
   local: config?.local

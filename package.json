@@ -19,6 +19,7 @@
     "@koa/router": "^12.0.0",
     "cheerio": "^1.0.0-rc.12",
     "colors": "^1.4.0",
+    "cross-env": "^7.0.3",
     "https-proxy-agent": "^7.0.1",
     "koa": "^2.14.2",
     "nanoid": "^3.0.0",

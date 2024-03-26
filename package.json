@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-sms": "npm run dev -w=sms-pages | npm run dev -w=sms-service",
     "dev-fileServer": "npm run dev -w=file-pages | npm run dev -w=file-service",
-    "build-sms": "npm run build -w=sms-pages | npm run dev -w=sms-service"
+    "build-sms": "npm run build -w=sms-pages | npm run build -w=sms-service",
+    "deploy-sms": "./scripts/deploy-sms.sh"
   },
   "author": "",
   "license": "ISC",

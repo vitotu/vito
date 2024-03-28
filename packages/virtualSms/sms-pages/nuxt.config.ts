@@ -3,11 +3,7 @@ import components from 'unplugin-vue-components/vite'
 import autoImport from 'unplugin-auto-import/vite'
 import { VarletUIResolver } from 'unplugin-vue-components/resolvers'
 import { defineNuxtConfig } from 'nuxt/config'
-import configData from '../envConfig.json'
-
-const mode = process.env.target || 'dev'
-const config:any = configData[mode] || {}
-const hostConfig:any = config?.pageHostConfig?.local || {}
+import { HOST_CONFIG } from './src/config'
 
 export default defineNuxtConfig({
   modules: ['@vant/nuxt'],
@@ -25,7 +21,7 @@ export default defineNuxtConfig({
     ]
   },
   devServer: {
-    port: hostConfig.port || 8080,
+    port: HOST_CONFIG.port || 8080,
   },
   components: {
     dirs: ['~/src/pages'],

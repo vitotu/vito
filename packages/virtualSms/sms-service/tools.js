@@ -1,10 +1,7 @@
 const https = require('https');
 const cheerio = require('cheerio');
 const { HttpsProxyAgent } = require('https-proxy-agent');
-
-const configData = require('../envConfig.json');
-const mode = process.env.target || 'dev'
-const config = configData[mode]
+const { config } = require('./config');
 
 const options = {
   agent: new HttpsProxyAgent(config.proxy)

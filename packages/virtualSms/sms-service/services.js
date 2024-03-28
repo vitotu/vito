@@ -2,7 +2,7 @@ const Qs = require('qs')
 const WebSocket = require('ws')
 const { LoopTask } = require('./taskExector')
 const tasks = new LoopTask()
-const { getDataByUrl, parseMainPage, diff2Array, parseNumber } = require('../index.js')
+const { getDataByUrl, parseMainPage, diff2Array, parseNumber } = require('./tools.js')
 const { config, SmsModules } = require('./config')
 
 class ws {

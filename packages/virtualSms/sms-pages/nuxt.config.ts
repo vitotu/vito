@@ -26,5 +26,17 @@ export default defineNuxtConfig({
   components: {
     dirs: ['~/src/pages'],
     global: true,
+  },
+  nitro: {
+    devProxy: {
+      '/api': {
+        target: 'http://localhost:3080',
+        changeOrigin: true,
+        prependPath: true,
+      }
+    },
+    experimental: {
+      websocket: true
+    }
   }
 })

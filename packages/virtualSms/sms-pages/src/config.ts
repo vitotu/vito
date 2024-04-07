@@ -10,11 +10,12 @@ export const HOST_CONFIG = {
   apiPort: config?.service?.port || 3080,
   apiPath: process.env.apiPath || '/api/',
   getApiPrefix () {
-    let url =`http://${window.location.host.split(':')[0]}${this.apiPath}`
+    let url =`http://${window.location.host}${this.apiPath}`
+    console.log('debugger', url)
     return url
   },
   getWsPrefix () {
-    let url =`ws://${window.location.host.split(':')[0]}${this.apiPath}`
+    let url =`ws://${window.location.host}${this.apiPath}`
     return url
   }
 }

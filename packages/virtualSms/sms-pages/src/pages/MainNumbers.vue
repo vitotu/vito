@@ -5,7 +5,7 @@ import Clipboard from "clipboard"
 import { showToast } from 'vant'
 import { Ws } from '../utils'
 import { listenMainPages, listenByNumbers, stopTaskByIds } from '../apis'
-import { NumberItem, NumberDetail, NotificationMsg } from '../types'
+import { type NumberItem, type NumberDetail, type NotificationMsg } from '../types'
 import NumberDetailVue from '../components/NumberDetail.vue'
 const count = ref(0)
 const ws:Ref<Ws> = inject('ws')

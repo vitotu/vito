@@ -15,7 +15,7 @@ export const HOST_CONFIG = {
     return url
   },
   getWsPrefix () {
-    let url =`ws://${window.location.host}${this.apiPath}`
+    let url =`ws://${window.location.host}`
     return url
   }
 }

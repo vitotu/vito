@@ -33,6 +33,11 @@ export default defineNuxtConfig({
         target: 'http://localhost:3080',
         changeOrigin: true,
         prependPath: true,
+      },
+      '/ws/': {
+        target: 'ws://localhost:3080',
+        changeOrigin: true,
+        ws: true,
       }
     },
     experimental: {

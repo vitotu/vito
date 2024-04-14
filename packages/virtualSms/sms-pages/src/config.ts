@@ -11,7 +11,6 @@ export const HOST_CONFIG = {
   apiPath: process.env.apiPath || '/api/',
   getApiPrefix () {
     let url =`http://${window.location.host}${this.apiPath}`
-    console.log('debugger', url)
     return url
   },
   getWsPrefix () {

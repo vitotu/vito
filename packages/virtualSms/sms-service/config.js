@@ -4,7 +4,8 @@ const mode = process.env.target || 'dev'
 let config = ConfigData[mode] || {}
 
 exports.config = {
-  ...(config?.service || {})
+  ...(config?.service || {}),
+  wsPort: config?.page?.port
 }
 
 const SmsModules = new Map()

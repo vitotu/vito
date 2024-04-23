@@ -19,7 +19,7 @@ module.exports = {
         NODE_ENV: 'development', // 设置运行环境，此时process.env.NODE_ENV的值就是development
         PORT: '8081',
         target: 'prod-i996',
-        apiPath: '/api/'
+        apiPath: '/api/sms/'
       },
       out_file: './deploy/logs/out-smsPage.log', // 普通日志路径
       error_file: './deploy/logs/err-smsPage.log', // 错误日志路径

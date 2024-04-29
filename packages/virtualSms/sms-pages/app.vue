@@ -24,7 +24,10 @@ import type { Ref } from 'vue'
 import { Ws } from './src/utils'
 const active = ref('MainNumbers')
 const ws:Ref<Ws|null> = ref(null)
-
+const runtimeConfig = useRuntimeConfig()
+if(typeof window !== 'undefined') {
+  window.GBvar = runtimeConfig
+}
 onMounted(() => {
   ws.value = new Ws()
 })

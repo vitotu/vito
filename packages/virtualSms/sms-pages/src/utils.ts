@@ -1,5 +1,7 @@
-import { HOST_CONFIG } from "./config"
+import { useConfig } from "./config"
 import { nanoid } from 'nanoid'
+
+const HOST_CONFIG = useConfig()
 
 interface CBObj {
   [key: string]: Function

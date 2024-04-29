@@ -1,8 +1,7 @@
 import axios from "axios";
-import { HOST_CONFIG } from "./config";
-
+import { useConfig } from "./config";
+const HOST_CONFIG = useConfig()
 export async function listenMainPages(wsId: string) {
-  console.log(HOST_CONFIG.getApiPrefix())
   let [res, err] = await axios.get(`${HOST_CONFIG.getApiPrefix()}?wsId=${wsId}`).then(r => [r, null], e => [null, e])
   if(err) throw new Error('listenMainPages error', err)
   if(res.status == 200) {

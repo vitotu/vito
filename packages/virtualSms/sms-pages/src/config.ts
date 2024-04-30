@@ -4,9 +4,11 @@ export const useConfig = () => {
   const mode = process.env.target || 'dev'
   let config:any = ConfigData[mode] || {}
   const getConfigFile = () => {
-    console.log(GBvar)
     if(GBvar) {
-      return ConfigData[GBvar?.public?.target || 'dev']
+      return {
+        ...(ConfigData[GBvar?.public?.target || 'dev'] || {}),
+        GBvar
+      }
     }
     return {}
   }
@@ -17,7 +19,9 @@ export const useConfig = () => {
     apiPort: config?.service?.port || 3080,
     apiPath: process.env.apiPath || '/api/sms/',
     getApiPrefix () {
-      let url =`http://${window.location.host}${this.apiPath}`
+      const config = getConfigFile()
+      let apiPath = config?.GBvar?.public?.apiPath
+      let url =`http://${window.location.host}${apiPath}`
       return url
     },
     getWsPrefix () {

@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       target: process.env.target || 'dev-nuxt',
+      apiPath: process.env.apiPath || '/api/sms/',
     }
   },
   vite: {

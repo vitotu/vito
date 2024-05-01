@@ -1,8 +1,6 @@
 import ConfigData from '../../envConfig.json'
 
 export const useConfig = () => {
-  const mode = process.env.target || 'dev'
-  let config:any = ConfigData[mode] || {}
   const getConfigFile = () => {
     if(GBvar) {
       return {
@@ -13,11 +11,6 @@ export const useConfig = () => {
     return {}
   }
   return {
-    host: config?.page?.host || 'localhost',
-    port: config?.page?.port || 8080,
-    api: 'http://' + (config?.service?.host || 'localhost'),
-    apiPort: config?.service?.port || 3080,
-    apiPath: process.env.apiPath || '/api/sms/',
     getApiPrefix () {
       const config = getConfigFile()
       let apiPath = config?.GBvar?.public?.apiPath

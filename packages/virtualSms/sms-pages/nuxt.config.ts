@@ -33,19 +33,19 @@ export default defineNuxtConfig({
   },
   nitro: {
     devProxy: {
-      '/api': {
-        target: 'http://localhost:3080',
+      '/api/sms/': {
+        target: 'http://localhost:3080/',
         changeOrigin: true,
         prependPath: true,
       },
       '/ws/': {
-        target: 'ws://localhost:3080',
+        target: 'ws://localhost:3080/',
         changeOrigin: true,
         ws: true,
       }
     },
     experimental: {
-      websocket: true
+      websocket: true,
     }
   }
 })

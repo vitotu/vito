@@ -1,12 +1,19 @@
 {
   "name": "pushmsgserver",
   "version": "1.0.0",
-  "description": "push message server",
+  "description": "",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "vito",
-  "license": "ISC"
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "koa": "^2.15.3",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^13.0.1",
+    "node-cron": "^3.0.3",
+    "sqlite": "^5.1.1"
+  }
 }

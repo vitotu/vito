@@ -1,62 +1,69 @@
-const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
+const Koa = require("koa");
+const Router = require("koa-router");
+const fs = require("fs");
+const path = require("path");
 const cron = require("node-cron");
-const cors = require("cors");
-const app = express();
+const cors = require("@koa/cors");
+const app = new Koa();
+const router = new Router();
 const port = 3000;
+const dataFilePath = path.join(__dirname, "queries.json");
 
-// 连接 SQLite 数据库
-const db = new sqlite3.Database("database.db", (err) => {
-  if (err) console.error(err.message);
-  else console.log("Connected to SQLite database.");
-});
+// 确保文件存在
+if (!fs.existsSync(dataFilePath)) {
+  fs.writeFileSync(dataFilePath, JSON.stringify([]));
+}
 
-// 初始化数据库表
-db.run(`
-  CREATE TABLE IF NOT EXISTS queries (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    query TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+// 读取 JSON 文件
+function readData() {
+  const fileData = fs.readFileSync(dataFilePath);
+  return JSON.parse(fileData);
+}
+
+// 写入 JSON 文件
+function writeData(data) {
+  fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
+}
 
 app.use(cors());
-app.use(express.json());
+app.use(require("koa-bodyparser")());
 
 // 接口1: 存储 query 参数
-app.get("/api/store", (req, res) => {
-  const query = JSON.stringify(req.query);
-  db.run("INSERT INTO queries (query) VALUES (?)", [query], function (err) {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ success: true, id: this.lastID });
-  });
+router.get("/api/store", async (ctx) => {
+  const query = JSON.stringify(ctx.request.query);
+  const data = readData();
+  const newData = {
+    id: data.length + 1, // 简单的ID逻辑
+    query,
+    created_at: new Date().toISOString(),
+  };
+  data.push(newData);
+  writeData(data);
+  ctx.body = { success: true, id: newData.id };
 });
 
 // 接口2: 查询最近 7 天的数据，支持日期筛选
-app.get("/api/query", (req, res) => {
-  let date = req.query.date || new Date().toISOString().split("T")[0];
-  db.all(
-    `SELECT * FROM queries WHERE DATE(created_at) = ? ORDER BY created_at DESC`,
-    [date],
-    (err, rows) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json(rows);
-    }
-  );
+router.get("/api/query", async (ctx) => {
+  const date = ctx.request.query.date || new Date().toISOString().split("T")[0];
+  const data = readData();
+  const filteredData = data.filter((item) => item.created_at.split("T")[0] === date);
+  ctx.body = filteredData;
 });
 
 // 定时任务：每天删除 7 天前的数据
 cron.schedule("0 0 * * *", () => {
-  db.run("DELETE FROM queries WHERE created_at < datetime('now', '-7 days')", (err) => {
-    if (err) console.error("Error cleaning up old data:", err.message);
-    else console.log("Old data cleaned up.");
+  const data = readData();
+  const filteredData = data.filter((item) => {
+    const itemDate = new Date(item.created_at);
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    return itemDate > sevenDaysAgo;
   });
+  writeData(filteredData);
+  console.log("Old data cleaned up.");
 });
 
+app.use(router.routes()).use(router.allowedMethods());
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

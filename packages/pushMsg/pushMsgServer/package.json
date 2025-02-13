@@ -10,10 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^5.0.0",
+    "axios": "^1.7.9",
+    "child_process": "^1.0.2",
     "koa": "^2.15.3",
-    "koa-bodyparser": "^4.4.1",
     "koa-router": "^13.0.1",
     "node-cron": "^3.0.3",
-    "sqlite": "^5.1.1"
+    "sql.js": "^1.12.0"
   }
 }

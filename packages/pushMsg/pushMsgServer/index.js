@@ -13,7 +13,7 @@ const port = 3000;
 
 // 执行 termux-notification 命令
 function sendTermuxNotification(content) {
-  const command = `termux-notification -t 'pushMsg' -c '${content}' --type default`;
+  const command = `termux-notification -t 'pushMsg' -c '${content}' --priority high --button1 "more >" --button1-action "termux-dialog text -t 'pushMsg' -i '${content}'"`;
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`执行命令失败: ${error.message}`);

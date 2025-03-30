@@ -1,0 +1,3 @@
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+Allocated port 62966 for remote forward to 127.0.0.1:8080
+ClothoAllocatedPort62966

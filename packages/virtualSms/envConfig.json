@@ -1,0 +1,30 @@
+{
+  "dev": {
+    "service": {
+      "host": "",
+      "port": 3080,
+      "proxy": "http://192.168.142.100:10809",
+      "mainPath":"https://sms24.me/en/numbers",
+      "numberUrlPrefix": "https://sms24.me/en/numbers/"
+    },
+    "page": {
+      "host": "localhost",
+      "port": 8080,
+      "wsUrl": "ws://localhost:3080"
+    }
+  },
+  "prod-i996": {
+    "service": {
+      "host": "127.0.0.1",
+      "port": 3080,
+      "proxy": "http://127.0.0.1:10809",
+      "mainPath":"https://sms24.me/en/numbers",
+      "numberUrlPrefix": "https://sms24.me/en/numbers/"
+    },
+    "page": {
+      "host": "127.0.0.1",
+      "port": 8081,
+      "base": "/sms/"
+    }
+  }
+}

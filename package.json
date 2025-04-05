@@ -11,7 +11,11 @@
     "dev-sms": "cross-env target=dev npm run dev -w=sms-pages | cross-env target=dev npm run dev -w=sms-service",
     "dev-fileServer": "npm run dev -w=file-pages | npm run dev -w=file-service",
     "build-sms": "npm run build -w=sms-pages | npm run build -w=sms-service",
-    "deploy-sms": "cross-env target=prod-i996 ./scripts/deploy-sms.sh"
+    "deploy-sms": "cross-env target=prod-i996 ./scripts/deploy-sms.sh",
+    "dev-pushMsg": "cross-env target=dev pnpm --filter push-msg-page dev | cross-env target=dev pnpm --filter push-msg-server dev"
+  },
+  "pnpm": {
+    "overrides": {}
   },
   "author": "",
   "license": "ISC",
